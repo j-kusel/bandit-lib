@@ -1,84 +1,46 @@
-var React = require('react');
-var styled = require('styled-components');
-var { Dropdown, InputGroup } = require('react-bootstrap');
+import React from 'react';
+import styled from 'styled-components';
+import { Dropdown, InputGroup } from 'react-bootstrap';
+import { font_mixin, button_mixin, form_mixin, transition_mixin } from './mixins';
 
 const c = require('../config/CONFIG.json');
 
-var font_mixin = `
-    @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@500&display=swap');
-    font-family: 'Work Sans', sans-serif;
+
+// Form Components
+const FormLabel = styled.label`
+    color: black;
+    ${form_mixin}
+    font-size: 0.75em;
+    font-weight: bold;
+    width: 100px;
 `;
 
-var button_mixin = `
-    ${font_mixin}
-    background-color: ${c.secondary};
-    border: none;
-    box-shadow: none;
-    color: ${c.primary};
-    text-align: center;    
-    &:hover {
-        text-shadow: 1px 1px 5px ${c.primary_shadow};
-    }
+const FormInput = styled.input`
+    ${form_mixin}
+    padding: 2px 4px;
+    color: ${c.secondary};
+    background-color: ${c.primary};
 `;
 
-let timing = '0.3s';
-var transition_mixin = ['transition', '-webkit-transition', '-moz-transition', '-ms-transition', '-o-transition']
-    .reduce((acc, t) => `${acc}${t}: ${timing};\n`, '');
-
-// to use later
-/*var transition_mixin2 = (change) => ['transition', '-webkit-transition', '-moz-transition', '-ms-transition', '-o-transition']
-    .reduce((acc, t) => `${acc}${t}: ${timing} ${change};\n`, '');
-    */
-
-let sliderThumb = `
-    -webkit-appearance: none;
-    border-radius: 1.3px 1.3px 0.5px 0.5px;
-    appearance: none;
-    height: 10px;
-    width: 3px;
-    cursor: pointer;
-    margin-top: -8px;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    background: pink;
-`;
-
-let sliderTrack = `
-    width: 100%;
-    height: 2px;
-    cursor: pointer;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    background: white;
-    border-radius: 1.3px;
-`;
-
-var Slider = styled.input`
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    appearance: none;
-    background: transparent;
-    margin-left: 10px;
-    outline: none;
-    &:focus {
-        outline: none;
-    }
-
-    ${['-webkit-slider-thumb', '-moz-range-thumb', '-ms-thumb']
-        .map(prefix => `&::${prefix} { ${sliderThumb} }`)}
-    ${['-webkit-slider-runnable-track', '-moz-range-track', '-ms-track']
-        .map(prefix => `&::${prefix} { ${sliderTrack} }`)}
-`;
-
-var PanelHeader = styled.h3`
-    font-size: 10px;
-    border-bottom: 1px solid ${c.primary};
-    width: 80%;
-    margin-bottom: 4px;
-`;
-
-var InstInput = styled(InputGroup)`
+const StyledInputGroup = styled(InputGroup)`
     height: 20px;
     margin: 4px;
+`;
+
+var PlusButton = styled.button`
+    background: transparent;
+    border: 0;
+    ${transition_mixin}
+    ${props => 
+        props.open ? `
+            position: absolute;
+            left: 75px;
+            transform: rotate(45deg);
+        ` : `
+            position: absolute;
+            left: 0px;
+        `
+    }
 `;
 
 var ArrowButton = styled.button`
@@ -89,11 +51,9 @@ var ArrowButton = styled.button`
     height: 100%;
 `;
 
-var InstButton = styled.button`
-    background: transparent;
-    border: 0;
-`;
 
+
+// Mixer Components
 var MixerArrow = styled.button`
     display: block;
     margin: -2px 0px -4px 0px;
@@ -133,6 +93,44 @@ var MixerButton = styled.button`
         border: 1px solid black;
     }
 `
+let sliderThumb = `
+    -webkit-appearance: none;
+    border-radius: 1.3px 1.3px 0.5px 0.5px;
+    appearance: none;
+    height: 10px;
+    width: 3px;
+    cursor: pointer;
+    margin-top: -8px;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background: pink;
+`;
+
+let sliderTrack = `
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background: white;
+    border-radius: 1.3px;
+`;
+
+var Slider = styled.input`
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    background: transparent;
+    margin-left: 10px;
+    outline: none;
+    &:focus {
+        outline: none;
+    }
+
+    ${['-webkit-slider-thumb', '-moz-range-thumb', '-ms-thumb']
+        .map(prefix => `&::${prefix} { ${sliderThumb} }`)}
+    ${['-webkit-slider-runnable-track', '-moz-range-track', '-ms-track']
+        .map(prefix => `&::${prefix} { ${sliderTrack} }`)}
+`;
 
 var Playback = styled.button`
     width: 50px;
@@ -145,6 +143,12 @@ var Playback = styled.button`
     padding-bottom: 0px;
 `;
 
+var PanelHeader = styled.h3`
+    font-size: 10px;
+    border-bottom: 1px solid ${c.primary};
+    width: 80%;
+    margin-bottom: 4px;
+`;
 
 var Panel = styled.div`
     position: absolute;
@@ -154,63 +158,25 @@ var Panel = styled.div`
     padding: 0px;
 `;
 
-var Pane = styled.div`
+var NewInst = styled.div`
     position: absolute;
     width: ${c.PANES_WIDTH}px;
     left: ${props => props.x}px;
     top: ${props => props.y}px;
     height: ${props => props.height}px;
     border: none;
+    color: ${c.secondary};
+    background-color: none;
+    font-size: 10pt;
     z-index: 50;
 
     button {
         color: ${c.primary};
     }
 
-    .closed {
-        ${transition_mixin}
-        position: absolute;
-        left: 0px;
-    }
-
-    .opened {
-        ${transition_mixin}
-        position: absolute;
-        left: 75px;
-        transform: rotate(45deg);
-    }
-        
-        
-`;
-
-var NewInst = styled(Pane)`
-    width: initial;
-    background-color: none;
-    font-size: 10pt;
-    color: ${c.secondary};
     input {
         border-bottom: 1px solid black;
     }
-`;
-
-var toolbar = styled(Pane)`
-    padding: 10px;
-    background-color: ${c.secondary};
-    width: ${c.TOOLBAR_WIDTH}px;
-    border: black solid 1px;
-    color: red;
-`;
-
-var Metadata = styled(toolbar)`
-    height: ${c.META_HEIGHT}px;
-`;
-
-var Rehearsal = styled(toolbar)`
-    height: ${c.REHEARSAL_HEIGHT}px;
-`;
-
-var Log = styled(toolbar)`
-    height: ${c.LOG_HEIGHT}px;
 `;
 
 var Footer = styled.div`
@@ -247,20 +213,8 @@ var Ext = styled.a`
     display: inline-block;
 `;
 
-let form_mixin = [
-    font_mixin,
-    `border: none;
-    width: 48px;
-    padding: 2px;
-    font-size: 8pt;
 
-    &:focus {
-        outline: none;
-        border: none;
-    }
-
-`].join('\n');
-
+// Bottom bar components
 var TrackingBar = styled.div`
     position: absolute;
     height: ${c.TRACKING_HEIGHT}px;
@@ -298,35 +252,12 @@ var Edit = styled.div`
     z-index: 50;
 `;
 
-const Link = ({ className, children }) => (
-  <button className={className}>
-    {children}
-  </button>
-);
-
-const StyledLink = styled(Link)`
+const StyledLink = styled.button`
     color: red;
     font-weight: bold;
 `;
 
-const FormLabel = styled.label`
-    color: black;
-    ${form_mixin}
-    font-size: 0.75em;
-    font-weight: bold;
-    width: 100px;
-`;
 
-const FormInput = styled.input`
-    ${form_mixin}
-    padding: 2px 4px;
-    color: ${c.secondary};
-    background-color: ${c.primary};
-`;
-
-var InstName = styled.h3`
-    color: ${c.primary};
-`;
 
 var TBButton = styled.button`
     ${button_mixin}
@@ -354,7 +285,6 @@ var Upload = styled(TBButton)`
 `;
 
 var Submit = styled(TBButton)`
-    
     padding: 0px 4px;
     font-size: 10px;
     float: right;
@@ -382,7 +312,7 @@ var Lock = styled.button`
 `;
 
 
-var TBddtoggle = styled(Dropdown.Toggle)`
+var TBToggle = styled(Dropdown.Toggle)`
     height: 40px;
     &.dropdown-toggle {
         ${button_mixin}
@@ -413,9 +343,9 @@ var TBddtoggle = styled(Dropdown.Toggle)`
 var TBDropdown = styled(props => (
     <Dropdown 
  onSelect={props.onSelect}>
-      <TBddtoggle>
+      <TBToggle>
         {props.toggle}  
-      </TBddtoggle>
+      </TBToggle>
       <Dropdown.Menu>
         {/* props.menuItems.map(drop => (<Dropdown.Item key={drop.eventKey} eventKey={drop.eventKey}>{drop.text}</Dropdown.Item>))*/ }
         <Dropdown.Item>hello</Dropdown.Item>
@@ -437,5 +367,4 @@ var TBDropdown = styled(props => (
 
 
 
-
-export { Module, PanelHeader, Slider, MixerButton, ArrowButton, InstInput, InstButton, MixerArrow, MixerRow, NewInst, Link, StyledLink, FormInput, FormLabel, TrackingBar, Insert, Edit, Ext, Footer, Log, Rehearsal, Metadata, Upload, Submit, Playback, Panel, Pane, TBButton, AudioButton, InstName, Lock, TBDropdown };
+export { Module, PanelHeader, Slider, MixerButton, ArrowButton, StyledInputGroup, PlusButton, MixerArrow, MixerRow, NewInst, StyledLink, FormInput, FormLabel, TrackingBar, Insert, Edit, Ext, Footer, Upload, Submit, Playback, Panel, TBButton, AudioButton, Lock, TBDropdown };
