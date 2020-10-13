@@ -4,6 +4,9 @@ import { Dropdown, InputGroup } from 'react-bootstrap';
 import { font_mixin, button_mixin, form_mixin, transition_mixin } from './mixins';
 
 const c = require('../config/CONFIG.json');
+const { primary, secondary, accent } = require('../config/CONFIG.json');
+const colors = { primary, secondary, accent };
+
 
 
 // Form Components
@@ -177,6 +180,11 @@ var NewInst = styled.div`
     input {
         border-bottom: 1px solid black;
     }
+`;
+
+var Splash = styled.span`
+    ${font_mixin}
+    font-size: 48pt;
 `;
 
 var Footer = styled.div`
@@ -365,6 +373,11 @@ var TBDropdown = styled(props => (
 `;
 
 
+const mixins = {
+    font_mixin,
+    button_mixin,
+    form_mixin,
+    transition_mixin
+};
 
-
-export { Module, PanelHeader, Slider, MixerButton, ArrowButton, StyledInputGroup, PlusButton, MixerArrow, MixerRow, NewInst, StyledLink, FormInput, FormLabel, TrackingBar, Insert, Edit, Ext, Footer, Upload, Submit, Playback, Panel, TBButton, AudioButton, Lock, TBDropdown };
+export { colors, mixins, Splash, Module, PanelHeader, Slider, MixerButton, ArrowButton, StyledInputGroup, PlusButton, MixerArrow, MixerRow, NewInst, StyledLink, FormInput, FormLabel, TrackingBar, Insert, Edit, Ext, Footer, Upload, Submit, Playback, Panel, TBButton, AudioButton, Lock, TBDropdown };
