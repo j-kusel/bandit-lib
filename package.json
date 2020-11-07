@@ -1,6 +1,6 @@
 {
   "name": "bandit-lib",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A React component library for banditsound.com",
   "main": "./dist/index.js",
   "scripts": {
