@@ -4,8 +4,8 @@ import { Dropdown, InputGroup } from 'react-bootstrap';
 import { font_mixin, button_mixin, form_mixin, transition_mixin } from './mixins';
 
 const c = require('../config/CONFIG.json');
-const { primary, secondary, accent } = require('../config/CONFIG.json');
-const colors = { primary, secondary, accent };
+const { primary, secondary, accent, contrast, contrast_light, contrast_lighter } = require('../config/CONFIG.json');
+const colors = { primary, secondary, accent, contrast, contrast_light, contrast_lighter };
 
 
 
@@ -350,24 +350,26 @@ var TBToggle = styled(Dropdown.Toggle)`
 
 var TBDropdown = styled(props => (
     <Dropdown 
+    classNames={props.classNames}
  onSelect={props.onSelect}>
       <TBToggle>
         {props.toggle}  
       </TBToggle>
       <Dropdown.Menu>
-        {/* props.menuItems.map(drop => (<Dropdown.Item key={drop.eventKey} eventKey={drop.eventKey}>{drop.text}</Dropdown.Item>))*/ }
-        <Dropdown.Item>hello</Dropdown.Item>
+        { props.menuItems.map(drop => 
+            (<Dropdown.Item key={drop.eventKey} eventKey={drop.eventKey}>{drop.text}</Dropdown.Item>)
+        )}
       </Dropdown.Menu>
     </Dropdown>
 ))`
-    &.toggle-dropdown {
+    .dropdown-toggle {
         background-color: red;
     }
     color: red;
     padding: 5px 6px;
     border: none;
     border-radius: 0px;
-    background-color: ${c.secondary};
+    background-color: ${c.contrast};
     text-align: center;    
     width: 100%;
 `;

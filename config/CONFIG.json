@@ -1,5 +1,8 @@
 {
     "accent": "#A83000",
+    "contrast": "#4C594E",
+    "contrast_light": "#667368",
+    "contrast_lighter": "#848C85",
     "aux_primary": "#FAE4E8",
     "aux_secondary": "#301C0F",
     "secondary": "#F2EED8",
